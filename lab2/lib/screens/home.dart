@@ -1,9 +1,10 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:lab2/screens/randomJoke.dart';
 import 'package:lab2/services/apiService.dart';
 import 'package:lab2/widgets/TypesGrid.dart';
+
+import 'FavouriteJokes.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -29,7 +30,6 @@ class _HomeState extends State<Home> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,8 +44,22 @@ class _HomeState extends State<Home> {
           },
           icon: const Icon(Icons.looks_one_outlined),
         ),
-        title: const Text("211177 Lab2", style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold)),
+        title: const Text(
+          "211177 Lab2",
+          style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+        ),
         centerTitle: true,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.favorite, color: Colors.red),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const FavoriteJokesScreen()),
+              );
+            },
+          ),
+        ],
       ),
       body: TypesGrid(types: types),
     );

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:lab2/services/apiService.dart';
+import 'package:provider/provider.dart';
 import '../models/Joke.dart';
+import '../providers/FavouritesProvider.dart';
+import '../services/apiService.dart';
 
 class JokesList extends StatefulWidget {
   final String type;
@@ -32,6 +34,8 @@ class JokesListState extends State<JokesList> {
 
   @override
   Widget build(BuildContext context) {
+    final favoritesProvider = Provider.of<FavoritesProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: Text('${widget.type} Jokes'),
@@ -45,12 +49,23 @@ class JokesListState extends State<JokesList> {
         itemCount: jokes.length,
         itemBuilder: (context, index) {
           final joke = jokes[index];
+          final isFavorite = favoritesProvider.isFavorite(joke);
+
           return Card(
             elevation: 4.0,
             margin: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
             child: ListTile(
               title: Text(joke.setup),
               subtitle: Text(joke.punchline),
+              trailing: IconButton(
+                icon: Icon(
+                  isFavorite ? Icons.favorite : Icons.favorite_border,
+                  color: isFavorite ? Colors.red : null,
+                ),
+                onPressed: () {
+                  favoritesProvider.toggleFavorite(joke);
+                },
+              ),
             ),
           );
         },
